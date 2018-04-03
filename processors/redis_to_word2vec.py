@@ -27,6 +27,9 @@ except Exception as e:
 def clean_words(words):
     clean_words = []
 
+    if len(words) == 0:
+        return []  # return early
+
     # skip popular bot commands
     bot_prefixes = ["?", "!", ".", "~", "+", ",", "$"]
     if (len(words[0]) > 0 and words[0][0] in bot_prefixes) or \
@@ -34,12 +37,17 @@ def clean_words(words):
         return []  # return early
 
     for word in words:
+        if len(word) == 0:
+            continue
+
         # skip discord mentions
         if (word.startswith("<") and word.endswith(">")) or word.startswith("http"):
             continue
         
         # replace markdown
         word = word.replace("**", "").replace("__", "").replace("`", "")
+        if len(word) == 0:
+            continue
 
         # turn to lowercase - except if 2/3rds of the text is uppercase
         lowercase_chars = sum(1 for c in word if c.islower())
