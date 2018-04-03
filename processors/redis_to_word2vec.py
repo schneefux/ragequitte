@@ -49,27 +49,27 @@ def clean_words(words):
         if len(word) == 0:
             continue
 
-        # turn to lowercase - except if 2/3rds of the text is uppercase
+        # turn to lowercase - except if majority of the text is uppercase
         lowercase_chars = sum(1 for c in word if c.islower())
         uppercase_chars = sum(1 for c in word if c.isupper())
         chars = lowercase_chars + uppercase_chars
-        if lowercase_chars * 3 <= uppercase_chars:
+        if lowercase_chars >= uppercase_chars:
             word = word.lower()
         else:
             word = word.upper()
 
         # remove punctuation - not for emoticons
-        punctuation_end = ["?", "!", ",", ".", ";", "(", ")", "\"", "'"]
-        if word[-1] in punctuation_end and chars > 2:
+        punctuation_end = ["?", "!", ",", ":", ".", ";", "(", ")", "\"", "'"]
+        if word[-1] in punctuation_end and chars > 1 and \
+                word[0] != word[-1] != ":":
             word = word[:-1]
 
         punctuation_start = ["(", "\"", "'"]
-        if word[0] in punctuation_start and chars > 2:
+        if word[0] in punctuation_start and chars > 1:
             word = word[1:]
 
         # done.
-        if len(word) > 1:
-            clean_words.append(word)
+        clean_words.append(word)
 
     return clean_words
 
