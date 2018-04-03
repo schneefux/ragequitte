@@ -1,9 +1,15 @@
 #!/usr/bin/python3
 
+import logging
+import asyncio
+
 import discord
 import redis
-import asyncio
+
 import config
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 client = discord.Client()
 r = redis.StrictRedis(**{ **config.redis, "decode_responses": True })
@@ -23,11 +29,11 @@ def store_message(message):
 
 @client.event
 async def on_message(message):
-    print(message.content)
+    logging.info("{}#{}@{}: {}".format(message.server.name, message.channel.name, message.author.name, message.clean_content))
 
     fetch_history = store_message(message)
     if fetch_history:
-        print("+++ fetching channel history +++")
+        logging.info("+++ fetching channel history +++")
         try:
             async for logmsg in client.logs_from(message.channel, before=message, limit=100000):
                 store_message(logmsg)

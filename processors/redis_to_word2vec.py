@@ -97,12 +97,12 @@ class RedisIterator(object):
 
 def discord_batch_handler(message):
     global model_updating
-    print("building vocabulary")
+    logging.info("building vocabulary")
     model.build_vocab(RedisIterator(match="message:*", deleting=False), update=model_updating)
-    print("vocabulary size: {}".format(len(model.wv.vocab)))
-    print("training")
+    logging.info("vocabulary size: {}".format(len(model.wv.vocab)))
+    logging.info("training")
     model.train(RedisIterator(match="message:*", deleting=True), total_examples=model.corpus_count, epochs=model.epochs)
-    print("trained")
+    logging.info("trained")
     model.save(config.model)
     model_updating = True
     if config.debug:
