@@ -19,7 +19,7 @@ model_updating = True
 try:
     model = gensim.models.Word2Vec.load(config.model)
 except Exception as e:
-    model = gensim.models.Word2Vec(iter=1, min_count=10, size=200, workers=4, sg=1)
+    model = gensim.models.Word2Vec(iter=1, min_count=10, size=200, workers=4, sg=0)
     # defaults. iter=1: only iterate once, sg=1: use skip gram (needs more data)
     model_updating = False
 
